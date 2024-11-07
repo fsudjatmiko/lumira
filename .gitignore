@@ -148,13 +148,9 @@ saved_model/
 # ONNX
 *.onnx
 
-# TensorFlow
-*.pb
 
-# Model files
-computer_part_model.pth
-computer_part_model.onnx
-computer_part_model.pb
+
+
 
 # Logs
 logs/

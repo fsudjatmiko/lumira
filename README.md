@@ -9,8 +9,6 @@ Lumira is a deep learning project designed to recognize various computer parts f
 - [Usage](#usage)
 - [Model Training](#model-training)
 - [Model Conversion](#model-conversion)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Introduction
 Lumira is a digital assistant that helps you identify computer parts by analyzing images. It leverages a deep learning model trained on a dataset of computer component images to provide accurate predictions.
