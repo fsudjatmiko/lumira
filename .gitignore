@@ -142,12 +142,6 @@ yarn-error.log*
 # TensorFlow SavedModel files
 saved_model/
 
-# PyTorch
-*.pth
-
-# ONNX
-*.onnx
-
 
 
 
