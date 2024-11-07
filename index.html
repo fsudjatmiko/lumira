@@ -46,7 +46,7 @@
 
         async function loadModel() {
             try {
-                model = await tf.loadGraphModel('./computer_part_model_tfjs/model.json');
+                model = await tf.loadGraphModel('model.json');
                 document.getElementById('result').innerText = 'Model loaded. Please upload an image.';
             } catch (error) {
                 console.error('Error loading the model:', error);
