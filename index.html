@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumira - Computer Part Recognition</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Lumira</h1>
+        <p class="slogan">Your digital assistant to recognize your computer parts</p>
+    </header>
+    
+    <!-- Drag-and-Drop Area -->
+    <div id="dropArea" class="drop-area" onclick="triggerFileInput()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+        <p>Drag & Drop an image here or click to upload</p>
+        <input type="file" id="imageUpload" accept="image/*" onchange="loadImage(event)" style="display: none;" />
+    </div>
+
+    <!-- Uploaded Image Display (Fixed size) -->
+    <div id="imagePreviewContainer" class="image-preview-container" style="display: none;">
+        <img id="imagePreview" src="" alt="Uploaded Image" style="max-width: 500px; max-height: 500px;" />
+    </div>
+
+    <!-- Predict Button -->
+    <button id="predictButton" style="display: none;" onclick="startPrediction()">Predict</button>
+
+    <!-- Prediction Results -->
+    <div id="result">Model loading...</div>
+    <div id="predictionBox" class="prediction-box" style="display: none;">
+        <div id="topPredictedClass"></div>
+    </div>
+    <div id="scores"></div>
+
+    <script>
+        const classes = [
+            'cables', 'case', 'cpu', 'gpu', 'headset', 'keyboard',
+            'microphone', 'monitor', 'motherboard', 'mouse', 'ram',
+            'speakers', 'storage', 'webcam'
+        ];
+
+        let model;
+
+        async function loadModel() {
+            try {
+                model = await tf.loadGraphModel('./computer_part_model_tfjs/model.json');
+                document.getElementById('result').innerText = 'Model loaded. Please upload an image.';
+            } catch (error) {
+                console.error('Error loading the model:', error);
+                document.getElementById('result').innerText = 'Error loading model. Please check console for details.';
+            }
+        }
+
+        function triggerFileInput() {
+            document.getElementById('imageUpload').click();
+        }
+
+        // Drag-and-Drop Handlers
+        function handleDragOver(event) {
+            event.preventDefault();
+            document.getElementById('dropArea').classList.add('drag-over');
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            document.getElementById('dropArea').classList.remove('drag-over');
+            const file = event.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                loadImage({ target: { files: [file] } });
+            }
+        }
+
+        function loadImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const img = document.getElementById('imagePreview');
+                img.src = URL.createObjectURL(file);
+                document.getElementById('imagePreviewContainer').style.display = 'block';
+                document.getElementById('predictButton').style.display = 'inline-block';
+            }
+        }
+
+        function startPrediction() {
+            const img = document.getElementById('imagePreview');
+            predictImage(img);
+        }
+
+        async function predictImage(img) {
+            let tensor = tf.browser.fromPixels(img)
+                .resizeNearestNeighbor([224, 224])
+                .toFloat()
+                .div(tf.scalar(255))
+                .expandDims();
+
+            tensor = tf.transpose(tensor, [0, 3, 1, 2]);
+
+            try {
+                const prediction = model.predict(tensor);
+                const softmaxPredictions = tf.softmax(prediction).dataSync();
+
+                const top5 = Array.from(softmaxPredictions)
+                    .map((score, index) => ({ score, className: classes[index] }))
+                    .sort((a, b) => b.score - a.score)
+                    .slice(0, 5);
+
+                const topPrediction = top5[0];
+                document.getElementById('topPredictedClass').innerText = `Your PC Component is probably : ${topPrediction.className}`;
+                document.getElementById('predictionBox').style.display = 'block';
+
+                const scoresDiv = document.getElementById('scores');
+                scoresDiv.innerHTML = ''; // Clear previous scores
+
+                top5.forEach(item => {
+                    const scoreItem = document.createElement('div');
+                    scoreItem.className = 'score-item';
+                    scoreItem.innerHTML = `
+                        <img src="placeholders/${item.className}.png" alt="${item.className}" class="class-icon" />
+                        <span class="class-name">${item.className}</span> 
+                        <span class="percentage">${(item.score * 100).toFixed(2)}%</span>
+                    `;
+                    scoresDiv.appendChild(scoreItem);
+                });
+
+                tensor.dispose();
+                prediction.dispose();
+            } catch (error) {
+                console.error('Error during prediction:', error);
+                document.getElementById('result').innerText = 'Error during prediction. Check console for details.';
+            }
+        }
+
+        loadModel();
+    </script>
+</body>
+</html>

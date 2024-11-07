@@ -1,0 +1,188 @@
+:root {
+  --primary-gradient: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
+  --hover-gradient: linear-gradient(135deg, #0052d9 0%, #50dfff 100%);
+  --background-gradient: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  --card-gradient: linear-gradient(to right bottom, #ffffff 0%, #f8f9fa 100%);
+  --background-overlay: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9));
+}
+
+body {
+  font-family: 'Poppins';
+  min-height: 100vh;
+  background-image: var(--background-overlay), url('linus.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #333;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+  font-size: 3.2rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.slogan {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+#dropArea {
+  width: 80%;
+  max-width: 400px;
+  padding: 2rem;
+  border: 2px dashed #0061ff;
+  border-radius: 16px;
+  text-align: center;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+#dropArea:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 97, 255, 0.1);
+}
+
+#dropArea.drag-over {
+  background: linear-gradient(45deg, rgba(0, 97, 255, 0.1), rgba(96, 239, 255, 0.1));
+}
+
+button {
+  background: var(--primary-gradient);
+  color: white;
+  font-size: 1rem;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 97, 255, 0.2);
+}
+
+button:hover {
+  background: var(--hover-gradient);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 97, 255, 0.3);
+}
+
+.prediction-box {
+  background: linear-gradient(135deg, rgba(0, 97, 255, 0.9) 0%, rgba(96, 239, 255, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 8px 25px rgba(0, 97, 255, 0.2);
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+#scores {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.score-item {
+  background: rgba(255, 255, 255, 0.9);
+  margin: 0.5rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.score-item:hover {
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 250, 0.95));
+  transform: translateX(4px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.class-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 1rem;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.class-name {
+  flex-grow: 1;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.percentage {
+  font-weight: 700;
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background-color: #e3f2fd;
+  min-width: 80px;
+  text-align: center;
+}
+
+.image-preview-container {
+  margin: 1rem 0;
+  width: 80%;
+  max-width: 500px;
+}
+
+.image-preview-container img {
+  max-width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.image-preview-container img:hover {
+  transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  .score-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .class-icon {
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .percentage {
+    margin-top: 0.5rem;
+  }
+}
