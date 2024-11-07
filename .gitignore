@@ -151,14 +151,6 @@ saved_model/
 # TensorFlow
 *.pb
 
-# Model files
-computer_part_model.pth
-computer_part_model.onnx
-computer_part_model.pb
-
-# TFJS model files
-computer_part_model_tfjs/
-
 # Logs
 logs/
 *.log
