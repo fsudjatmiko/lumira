@@ -18,7 +18,7 @@ np.random.seed(SEED)
 
 torch.use_deterministic_algorithms(True)
 
-device = torch.device("mps")
+device = torch.device("mps" if torch.backend.mps.is_available() else "cpu")
 total_epochs = 100  # Increase the number of epochs
 batch_size = 32  # Increase the batch size
 
