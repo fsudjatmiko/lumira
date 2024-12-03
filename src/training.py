@@ -18,9 +18,15 @@ np.random.seed(SEED)
 
 torch.use_deterministic_algorithms(True)
 
-device = torch.device("mps" if torch.backend.mps.is_available() else "cpu")
+if torch.cuda.is_available():
+    device = torch.device("cuda")
+elif torch.mps.is_available():
+    device = torch.device("mps")
+else:
+    device = torch.device("cpu")
+
 total_epochs = 100  # Increase the number of epochs
-batch_size = 32  # Increase the batch size
+batch_size = 64  # Increase the batch size
 
 if __name__ == "__main__":
 
@@ -44,6 +50,12 @@ if __name__ == "__main__":
         transforms.RandomVerticalFlip(),
         transforms.RandomRotation(10),
         transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
+        transforms.RandomResizedCrop(128, scale=(0.8, 1.0)),
+        transforms.RandomAffine(degrees=15, translate=(0.1, 0.1), scale=(0.8, 1.2)),
+        transforms.RandomGrayscale(p=0.2),
+        transforms.RandomPerspective(distortion_scale=0.5, p=0.5),
+        transforms.GaussianBlur(kernel_size=(5, 9), sigma=(0.1, 5)),
+        transforms.RandomInvert(p=0.5)
     ]
 
     validation_dataset = SimpleTorchDataset('./splitted/val')

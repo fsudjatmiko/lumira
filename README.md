@@ -1,6 +1,8 @@
 # Lumira - Computer Part Recognition
 
-Lumira is a deep learning project designed to recognize various computer parts from images. This project utilizes a ResNet50 model fine-tuned to classify 14 different types of computer components.
+![Lumira Logo](logo.png)
+
+Lumira is a deep learning project designed to recognize various computer parts from images. This project utilizes a simplecnn model fine-tuned to classify 14 different types of computer components.
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -24,7 +26,7 @@ To get started with Lumira, follow these steps:
 
 1. Clone the repository:
   ```sh
-  git clone https://github.com/yourusername/lumira.git
+  git clone https://github.com/fsudjatmiko/lumira.git
   cd lumira
   ```
 
@@ -53,7 +55,7 @@ To train the model, follow these steps:
   python train_model.py
   ```
 
-3. The trained model will be saved as `computer_part_model.pth`.
+3. The trained model will be saved as `best_checkpoint.pth`.
 
 ## Model Conversion
 To convert the trained model to ONNX and TensorFlow formats:

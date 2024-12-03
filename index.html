@@ -10,30 +10,36 @@
 </head>
 <body>
     <header>
-        <h1>Lumira</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="history.html">History Log</a></li>
+            </ul>
+        </nav>
+        <img src="logo.png" alt="Logo" class="logo"> <!-- Placeholder for logo -->
         <p class="slogan">Your digital assistant to recognize your computer parts</p>
     </header>
     
-    <!-- Drag-and-Drop Area -->
-    <div id="dropArea" class="drop-area" onclick="triggerFileInput()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
-        <p>Drag & Drop an image here or click to upload</p>
-        <input type="file" id="imageUpload" accept="image/*" onchange="loadImage(event)" style="display: none;" />
-    </div>
+    <main>
+        <div id="dropArea" class="drop-area" onclick="triggerFileInput()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+            <p>Drag & Drop an image here or click to upload</p>
+            <input type="file" id="imageUpload" accept="image/*" onchange="loadImage(event)" style="display: none;" />
+        </div>
 
-    <!-- Uploaded Image Display (Fixed size) -->
-    <div id="imagePreviewContainer" class="image-preview-container" style="display: none;">
-        <img id="imagePreview" src="" alt="Uploaded Image" style="max-width: 500px; max-height: 500px;" />
-    </div>
+        <div id="imagePreviewContainer" class="image-preview-container" style="display: none;">
+            <img id="imagePreview" src="" alt="Uploaded Image" />
+        </div>
 
-    <!-- Predict Button -->
-    <button id="predictButton" style="display: none;" onclick="startPrediction()">Predict</button>
+        <button id="predictButton" style="display: none;" onclick="startPrediction()">Predict</button>
 
-    <!-- Prediction Results -->
-    <div id="result">Model loading...</div>
-    <div id="predictionBox" class="prediction-box" style="display: none;">
-        <div id="topPredictedClass"></div>
-    </div>
-    <div id="scores"></div>
+        <div id="result">Model loading...</div>
+        <div id="predictionBox" class="prediction-box" style="display: none;">
+            <div id="topPredictedClass"></div>
+        </div>
+        <div id="scores"></div>
+    </main>
+
+    <img src="rightgirl.png" alt="Right Anime Girl" class="anime-girl right">
 
     <script>
         const classes = [
@@ -58,7 +64,6 @@
             document.getElementById('imageUpload').click();
         }
 
-        // Drag-and-Drop Handlers
         function handleDragOver(event) {
             event.preventDefault();
             document.getElementById('dropArea').classList.add('drag-over');
@@ -78,7 +83,7 @@
             if (file) {
                 const img = document.getElementById('imagePreview');
                 img.src = URL.createObjectURL(file);
-                document.getElementById('imagePreviewContainer').style.display = 'block';
+                document.getElementById('imagePreviewContainer').style.display = 'flex';
                 document.getElementById('predictButton').style.display = 'inline-block';
             }
         }
@@ -123,6 +128,20 @@
                     `;
                     scoresDiv.appendChild(scoreItem);
                 });
+
+                // Save prediction to history
+                const history = JSON.parse(localStorage.getItem('predictionHistory')) || [];
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    history.push({
+                        date: new Date().toLocaleString(),
+                        className: topPrediction.className,
+                        score: (topPrediction.score * 100).toFixed(2),
+                        image: event.target.result
+                    });
+                    localStorage.setItem('predictionHistory', JSON.stringify(history));
+                };
+                reader.readAsDataURL(document.getElementById('imageUpload').files[0]);
 
                 tensor.dispose();
                 prediction.dispose();

@@ -18,30 +18,66 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
-h1 {
+header {
+  width: 100%;
   background: var(--primary-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  font-weight: 700;
-  font-size: 3.2rem;
-  margin-bottom: 0.5rem;
-  text-align: center;
+  padding: 1rem 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li {
+  margin: 0 1rem;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #ffeb3b;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto;
+  max-width: 500px; /* Adjust the size as needed */
 }
 
 .slogan {
   font-size: 1.2rem;
-  color: #666;
+  color: white; /* Change text color to white */
   margin-bottom: 2rem;
   text-align: center;
 }
 
-#dropArea {
+main {
   width: 80%;
-  max-width: 400px;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#dropArea {
+  width: 100%;
   padding: 2rem;
   border: 2px dashed #0061ff;
   border-radius: 16px;
@@ -82,29 +118,6 @@ button:hover {
 }
 
 .prediction-box {
-  background: linear-gradient(135deg, rgba(0, 97, 255, 0.9) 0%, rgba(96, 239, 255, 0.9) 100%);
-  backdrop-filter: blur(10px);
-  color: white;
-  padding: 1.5rem;
-  border-radius: 16px;
-  width: 80%;
-  max-width: 600px;
-  box-shadow: 0 8px 25px rgba(0, 97, 255, 0.2);
-  margin-top: 1.5rem;
-  text-align: center;
-}
-
-#scores {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(8px);
-  border-radius: 16px;
-  padding: 1.5rem;
-  width: 80%;
-  max-width: 600px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-}
-
-.score-item {
   background: rgba(255, 255, 255, 0.9);
   margin: 0.5rem 0;
   padding: 1rem 1.25rem;
@@ -114,6 +127,8 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-weight: bold; /* Make the text bold */
+  color: #0061ff; /* Change text color to match the theme */
 }
 
 .score-item:hover {
@@ -127,8 +142,6 @@ button:hover {
   height: 40px;
   margin-right: 1rem;
   border-radius: 50%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
 }
 
 .class-name {
@@ -153,8 +166,10 @@ button:hover {
 
 .image-preview-container {
   margin: 1rem 0;
-  width: 80%;
+  width: 100%;
   max-width: 500px;
+  display: flex;
+  justify-content: center;
 }
 
 .image-preview-container img {
@@ -166,6 +181,54 @@ button:hover {
 
 .image-preview-container img:hover {
   transform: scale(1.02);
+}
+
+.history-log {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.log-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.log-date {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.log-details {
+  display: flex;
+  align-items: center;
+}
+
+.uploaded-image {
+  width: 50px;
+  height: 50px;
+  margin-right: 1rem;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.anime-girl {
+  position: fixed;
+  bottom: 0;
+  width: 200px; /* Adjust the size as needed */
+}
+
+.anime-girl.left {
+  left: 0;
+}
+
+.anime-girl.right {
+  right: 0;
 }
 
 @media (max-width: 768px) {

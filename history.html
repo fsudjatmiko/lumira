@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumira - History Log</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="history.html">History Log</a></li>
+            </ul>
+        </nav>
+        <img src="logo.png" alt="Logo" class="logo"> <!-- Placeholder for logo -->
+        <p class="slogan">Your digital assistant to recognize your computer parts</p>
+    </header>
+    
+    <main>
+        <h2>Prediction History</h2>
+        <div id="historyLog" class="history-log">
+            <!-- History log entries will be dynamically added here -->
+        </div>
+    </main>
+    <img src="rightgirl.png" alt="Right Anime Girl" class="anime-girl right">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const historyLog = document.getElementById('historyLog');
+            const history = JSON.parse(localStorage.getItem('predictionHistory')) || [];
+
+            history.forEach(entry => {
+                const logItem = document.createElement('div');
+                logItem.className = 'log-item';
+                logItem.innerHTML = `
+                    <div class="log-date">${entry.date}</div>
+                    <div class="log-details">
+                        <img src="${entry.image}" alt="Uploaded Image" class="uploaded-image" />
+                        <img src="placeholders/${entry.className}.png" alt="${entry.className}" class="class-icon" />
+                        <span class="class-name">${entry.className}</span>
+                        <span class="percentage">${entry.score}%</span>
+                    </div>
+                `;
+                historyLog.appendChild(logItem);
+            });
+        });
+    </script>
+</body>
+</html>
