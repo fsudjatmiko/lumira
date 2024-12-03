@@ -4,7 +4,12 @@ torchvision>=0.15.0
 onnx>=1.14.0
 onnx-tf>=1.10.0
 tensorflow>=2.14.0
+# Data Processing
+numpy>=1.21.0
+Pillow>=10.0.0
 
+# Progress Bar
+tqdm>=4.62.0
 # Data Processing
 Pillow>=10.0.0  
 
