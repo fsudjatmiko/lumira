@@ -11,7 +11,7 @@ model.fc = torch.nn.Sequential(
     torch.nn.Dropout(0.5),
     torch.nn.Linear(512, 14)  # 14 output classes
 )
-model.load_state_dict(torch.load("computer_part_model.pth"))
+model.load_state_dict(torch.load("runs/ComputerPartsClassification-1/best_checkpoint.pth"))
 model.eval()  # Set the model to evaluation mode
 
 # Dummy input tensor to match model input dimensions (batch_size=1, channels=3, height=224, width=224)
