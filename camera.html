@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumira - Real-time Camera Input</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #video {
+            display: block;
+            margin: 20px auto;
+            border: 2px solid #0061ff;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="history.html">History Log</a></li>
+                <li><a href="camera.html">Real-time Camera</a></li>
+            </ul>
+        </nav>
+        <img src="logo.png" alt="Logo" class="logo"> <!-- Placeholder for logo -->
+        <p class="slogan">Your digital assistant to recognize your computer parts</p>
+    </header>
+    
+    <main>
+        <h2>Real-time Camera Input</h2>
+        <video id="video" width="640" height="480" autoplay></video>
+        <button id="startCameraButton" onclick="startCamera()">Start Camera</button>
+        <button id="stopCameraButton" onclick="stopCamera()">Stop Camera</button>
+        <div id="result">Model loading...</div>
+        <div id="predictionBox" class="prediction-box" style="display: none;">
+            <div id="topPredictedClass"></div>
+        </div>
+        <div id="scores"></div>
+    </main>
+
+    <img src="rightgirl.png" alt="Right Anime Girl" class="anime-girl right">
+
+    <script>
+        const classes = [
+            'cables', 'case', 'cpu', 'gpu', 'headset', 'keyboard',
+            'microphone', 'monitor', 'motherboard', 'mouse', 'ram',
+            'speakers', 'storage', 'webcam'
+        ];
+
+        let model;
+
+        async function loadModel() {
+            try {
+                model = await tf.loadGraphModel('./tfjs_model/model.json');
+                document.getElementById('result').innerText = 'Model loaded. You can start the camera.';
+            } catch (error) {
+                console.error('Error loading the model:', error);
+                document.getElementById('result').innerText = 'Error loading model. Please check console for details.';
+            }
+        }
+
+        async function startCamera() {
+            const video = document.getElementById('video');
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+                console.log('Camera started');
+                video.addEventListener('loadeddata', () => {
+                    predictFromCamera(video);
+                });
+            } catch (error) {
+                console.error('Error accessing the camera:', error);
+            }
+        }
+
+        function stopCamera() {
+            const video = document.getElementById('video');
+            const stream = video.srcObject;
+            const tracks = stream.getTracks();
+
+            tracks.forEach(track => track.stop());
+            video.srcObject = null;
+            console.log('Camera stopped');
+        }
+
+        async function predictFromCamera(video) {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            setInterval(async () => {
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imgData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+                let tensor = tf.browser.fromPixels(imgData)
+                    .resizeNearestNeighbor([224, 224])
+                    .toFloat()
+                    .div(tf.scalar(255))
+                    .expandDims();
+
+                tensor = tf.transpose(tensor, [0, 3, 1, 2]);
+
+                try {
+                    const prediction = model.predict(tensor);
+                    const softmaxPredictions = tf.softmax(prediction).dataSync();
+
+                    const top5 = Array.from(softmaxPredictions)
+                        .map((score, index) => ({ score, className: classes[index] }))
+                        .sort((a, b) => b.score - a.score)
+                        .slice(0, 5);
+
+                    const topPrediction = top5[0];
+                    document.getElementById('topPredictedClass').innerText = `Your PC Component is probably : ${topPrediction.className}`;
+                    document.getElementById('predictionBox').style.display = 'block';
+
+                    const scoresDiv = document.getElementById('scores');
+                    scoresDiv.innerHTML = ''; // Clear previous scores
+
+                    top5.forEach(item => {
+                        const scoreItem = document.createElement('div');
+                        scoreItem.className = 'score-item';
+                        scoreItem.innerHTML = `
+                            <img src="placeholders/${item.className}.png" alt="${item.className}" class="class-icon" />
+                            <span class="class-name">${item.className}</span> 
+                            <span class="percentage">${(item.score * 100).toFixed(2)}%</span>
+                        `;
+                        scoresDiv.appendChild(scoreItem);
+                    });
+
+                    tensor.dispose();
+                    prediction.dispose();
+                } catch (error) {
+                    console.error('Error during prediction:', error);
+                }
+            }, 1000); // Predict every second
+        }
+
+        window.onload = loadModel;
+    </script>
+</body>
+</html>
