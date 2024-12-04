@@ -58,15 +58,10 @@ To train the model, follow these steps:
 3. The trained model will be saved as `best_checkpoint.pth`.
 
 ## Model Conversion
-To convert the trained model to ONNX and TensorFlow formats:
+To convert the trained model to ONNX
 
-1. Convert to ONNX:
+Convert to ONNX:
   ```sh
-  python to_onnx.py
-  ```
-
-2. Convert to TensorFlow:
-  ```sh
-  python onnx_to_tf.py
+  python src/to_onnx.py
   ```
 
