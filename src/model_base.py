@@ -1,7 +1,5 @@
 import torch
 import torch.nn    as nn
-import torchvision as tv
-
 
 class BasicConvolution(nn.Module):
     def __init__(self, input_ch : int, output_ch : int) -> None:
@@ -75,22 +73,6 @@ class SimpleCNN(nn.Module):
         x  = x.view(bz, cz) # (N, 128,   1,   1) => (N, 128)  ## 4D Tensor => 2D Tensor
         
         x = self.head(x)    # (N, 128)           => (N, output_class)
-        return x
-
-class BasicMobileNet(nn.Module):
-    def __init__(self, output_classes : int) -> None:
-        super().__init__()
-
-        self.base = tv.models.mobilenet_v3_small(weights = tv.models.MobileNet_V3_Small_Weights.DEFAULT)
-        self.base.classifier = nn.Sequential(
-            nn.Linear(576, 128),
-            nn.LeakyReLU(),
-            nn.Dropout(0.25),
-            nn.Linear(128, output_classes)
-        )
-    
-    def forward(self, x : torch.Tensor) -> torch.Tensor:
-        x = self.base(x)
         return x
 
 if __name__ == "__main__":
